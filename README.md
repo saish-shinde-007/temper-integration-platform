@@ -2,6 +2,11 @@
 
 ### 🚀 Live demo: **https://temper-ui-444565930301.us-west1.run.app**
 
+**Quick paths in the demo:**
+- [Example prompt: CRON](#1-cron-example--poll-system-a-transform-post-to-system-b)
+- [Example prompt: WEBHOOK](#2-webhook-example--receive-a-json-order-payload-forward-to-system-b)
+- [Example prompt: SFTP](#3-sftp-example--process-csv-rows-from-a-file-drop-event)
+
 A working slice of the platform described in [ARCHITECTURE.md](ARCHITECTURE.md). User describes an integration in plain English, an agentic Claude loop writes JavaScript and validates it in a sandbox until it passes, you approve, then it gets deployed and runs against the actual target systems.
 
 Live and deployed on GCP Cloud Run. Source generation goes through the **Claude Agent SDK** (multi-turn, tools, MCP). Sandbox is **E2B** (Firecracker microVMs as a service — real VM-level isolation, not container-only). Workflow engine is **Temporal**, self-hosted on a free-tier `e2-micro` VM reachable only via a VPC connector. State persists in **Cloud SQL Postgres** with tenant-scoped queries.
@@ -57,13 +62,13 @@ flowchart TB
     Egress --> SystemB
 ```
 
-## Try it from scratch — three trigger types in the live UI
+## Example prompts — try all three trigger types in the live UI
 
 Open https://temper-ui-444565930301.us-west1.run.app and hard-refresh (Cmd+Shift+R) to clear any cached JS.
 
-For each scenario: click **"+ New integration"** in the sidebar, **clear the autofilled textarea**, **select the trigger type** under "Trigger", **paste the prompt**, and click the **green arrow-up Submit** in the textarea's bottom-right corner. Watch the status pill cycle `Draft → Generating → Tested` in ~15-30 seconds, then click **Approve** to walk to **Deployed** (~3-5 sec).
+For each scenario: click **"+ New integration"** in the sidebar, **select the trigger type** under "Trigger" (cron / webhook / sftp), **paste the prompt** into the empty textarea, and click the **green arrow-up Submit** in the bottom-right corner. The status pill **auto-updates** as the workflow walks `Draft → Generating → Tested` (~15-30 seconds) — no manual refresh needed. Then click **Approve** to walk to **Deployed** (~3-5 sec, also auto-refreshing).
 
-### 1) CRON — poll System A, transform, POST to System B
+### 1) CRON example — poll System A, transform, POST to System B
 
 Trigger: **cron**, expression `*/15 * * * *`
 
@@ -79,7 +84,7 @@ temper-mock-b-444565930301.us-west1.run.app.
 
 Expected: 10 orders actually move from System A to System B. Verify at https://temper-mock-b-444565930301.us-west1.run.app/received.
 
-### 2) WEBHOOK — receive a JSON order payload, forward to System B
+### 2) WEBHOOK example — receive a JSON order payload, forward to System B
 
 Trigger: **webhook**, path `/incoming`
 
@@ -95,7 +100,7 @@ Hostnames: temper-mock-b-444565930301.us-west1.run.app.
 
 Expected: sandbox runs with `triggerPayload=null` (no real webhook fired during /test), code handles the null case and returns `{ok:true, output:{message:'no payload to process'}}`, integration walks to Tested. In production, the runner's webhook listener would route real inbound POSTs to this code.
 
-### 3) SFTP — process CSV rows from a file-drop event
+### 3) SFTP example — process CSV rows from a file-drop event
 
 Trigger: **sftp**, host `sftp.example.com`, port `22`, path `/inbox`, pattern `*.csv`
 

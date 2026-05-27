@@ -8,7 +8,7 @@ import {
   X,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import type {
   Integration,
@@ -62,6 +62,25 @@ export function IntegrationDetail({
     integration.state === 'Running' ||
     integration.state === 'Degraded';
   const isApproved = integration.state === 'Approved';
+
+  // Auto-refresh the page while the integration is in a transitional state.
+  // Without this, the server-rendered page would only show stale data and the
+  // user would have to manually refresh to see state pill, banner, generated
+  // code, and runs update as the workflow progresses.
+  //
+  // Polls every 2.5s while transitional; stops once it settles on a quiescent
+  // state (Tested awaits human approval; Deployed/Running/Degraded/Retired/
+  // Draft are stable). Cleanup on unmount or state change.
+  useEffect(() => {
+    const transitional: Integration['state'][] = [
+      'Generating',
+      'Approved',
+      'Building',
+    ];
+    if (!transitional.includes(integration.state)) return;
+    const id = setInterval(() => router.refresh(), 2500);
+    return () => clearInterval(id);
+  }, [integration.state, router]);
 
   const onApprove = async () => {
     // current_version_id is only set after Deploy. On Tested state it's still
