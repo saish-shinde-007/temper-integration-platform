@@ -1,0 +1,52 @@
+services:
+  # Temporal is not in compose for the demo path.
+  # The API uses StubTemporalClient (TEMPER_USE_STUB_TEMPORAL=1) which walks the
+  # state machine via the DB directly — same contracts, no infra dependency.
+  # For real Temporal: install Temporal CLI (`brew install temporal`) and run
+  # `temporal server start-dev` in a separate terminal; then start the workflow
+  # worker (cd packages/workflows && node dist/worker.js) and unset
+  # TEMPER_USE_STUB_TEMPORAL on the API.
+
+  mock-system-a:
+    build:
+      context: .
+      dockerfile: packages/mocks/system-a/Dockerfile
+    container_name: temper-mock-a
+    ports:
+      - "5001:5001"
+    networks:
+      - temper-net
+
+  mock-system-b:
+    build:
+      context: .
+      dockerfile: packages/mocks/system-b/Dockerfile
+    container_name: temper-mock-b
+    ports:
+      - "5002:5002"
+    networks:
+      - temper-net
+
+  mock-sftp:
+    build:
+      context: .
+      dockerfile: packages/mocks/sftp/Dockerfile
+    container_name: temper-mock-sftp
+    ports:
+      - "5022:22"
+    networks:
+      - temper-net
+
+  egress-proxy:
+    build:
+      context: .
+      dockerfile: packages/egress-proxy/Dockerfile
+    container_name: temper-egress-proxy
+    ports:
+      - "5080:5080"
+    networks:
+      - temper-net
+
+networks:
+  temper-net:
+    driver: bridge
