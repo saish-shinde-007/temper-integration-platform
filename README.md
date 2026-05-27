@@ -1,11 +1,11 @@
-# Integration Platform — Take-Home Demo
+# Take Home Integration Platform
 
-### 🚀 Live demo: **https://temper-ui-444565930301.us-west1.run.app**
+### 🚀 Live app: **https://temper-ui-444565930301.us-west1.run.app**
 
-**Quick paths in the demo:**
-- [Example prompt: CRON](#1-cron-example--poll-system-a-transform-post-to-system-b)
-- [Example prompt: WEBHOOK](#2-webhook-example--receive-a-json-order-payload-forward-to-system-b)
-- [Example prompt: SFTP](#3-sftp-example--process-csv-rows-from-a-file-drop-event)
+### 📋 Example prompts to try in the live app
+- [CRON — poll System A, transform, POST to System B](#1-cron-example--poll-system-a-transform-post-to-system-b)
+- [WEBHOOK — receive a JSON payload, forward to System B](#2-webhook-example--receive-a-json-order-payload-forward-to-system-b)
+- [SFTP — process CSV rows from a file-drop event](#3-sftp-example--process-csv-rows-from-a-file-drop-event)
 
 A working slice of the platform described in [ARCHITECTURE.md](ARCHITECTURE.md). User describes an integration in plain English, an agentic Claude loop writes JavaScript and validates it in a sandbox until it passes, you approve, then it gets deployed and runs against the actual target systems.
 
