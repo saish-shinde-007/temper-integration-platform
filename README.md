@@ -121,7 +121,7 @@ Expected: sandbox runs with `triggerPayload=null`, code returns `{ok:true, outpu
 ### Notes
 
 - **Why only cron actually moves orders end-to-end**: the cloud deploy doesn't include the `runner` service (intentional — kept the deploy minimal). The cron path moves data because the workflow's test step polls real System A and POSTs to real System B. For webhook/sftp, real firing requires the runner — see "What's intentionally not in the deploy" below.
-- **Status pill not updating after submit?** Refresh the page. The detail page is server-rendered; the SSE-driven live update may take a moment.
+- **State pill stuck on Generating for >30s?** Open the **Sandbox logs** tab — you'll see the agent's tool calls streaming. Generation usually finishes in 15-25s but can take up to 60s for complex prompts.
 - **Stuck at Draft?** Check the sandbox logs tab — the agent's output went there. Usually a prompt that confused Claude about hostnames vs secret names.
 
 ---
