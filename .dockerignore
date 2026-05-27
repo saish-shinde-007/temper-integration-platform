@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+.git
+.github
+.vscode
+dist
+**/dist
+.next
+**/.next
+data
+*.log
+.env
+.env.local
+.DS_Store
+temper-prod-notes.md
+.pnpm-store

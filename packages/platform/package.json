@@ -1,0 +1,31 @@
+{
+  "name": "@temper/platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@temper/agent": "workspace:*",
+    "@temper/api": "workspace:*",
+    "@temper/db": "workspace:*",
+    "@temper/runner": "workspace:*",
+    "@temper/sandbox": "workspace:*",
+    "@temper/shared": "workspace:*",
+    "@temper/workflows": "workspace:*",
+    "@temporalio/activity": "^1.10.0",
+    "@temporalio/client": "^1.10.0",
+    "@temporalio/worker": "^1.10.0",
+    "@types/pg": "^8.20.0",
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}

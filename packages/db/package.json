@@ -1,0 +1,32 @@
+{
+  "name": "@temper/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --import tsx --test src/*.test.ts",
+    "seed": "tsx src/seed.ts"
+  },
+  "dependencies": {
+    "@temper/shared": "workspace:*",
+    "@types/pg": "^8.20.0",
+    "libsodium-wrappers": "^0.7.13",
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/libsodium-wrappers": "^0.7.14",
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}
